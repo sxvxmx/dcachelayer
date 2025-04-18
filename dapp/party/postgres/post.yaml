@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post
+  template:
+    metadata:
+      labels:
+        app: post
+    spec:
+      containers:
+      - name: postgres
+        imagePullPolicy: Always
+        image: sxvxmx/postgres:d # using repo (could be build)
+        ports:
+        - containerPort: 5432
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chimera-postgresql
+spec:
+  type: ClusterIP
+  selector:
+    app: post
+  ports:
+  - port: 5432
+    targetPort: 5432
